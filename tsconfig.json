@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "declaration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "lib/*": [
+        "lib/*"
+      ]
+    }
+  },
+  "globals": [
+    "Promise"
+  ],
+  "include": [
+    "./lib/**/*",
+    "./config/*"
+  ]
+}
