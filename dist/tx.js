@@ -39,36 +39,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
+var moment_1 = __importDefault(require("moment"));
 var web3_1 = __importDefault(require("web3"));
 var walletProvider_1 = require("./walletProvider");
-function sendTx(txConfig) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, walletProvider_1.enableWallet()];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/, walletProvider_1.sendTransaction(txConfig)];
-            }
-        });
-    });
-}
-exports.sendTx = sendTx;
 /**
  * waitReceipt waits for transaction to finish for the given txHash,
  * returns a promise which is resolved when transaction finishes.
  * @param {string} txHash a string with transaction hash as value
  */
-exports.waitReceipt = function (txHash) { return __awaiter(_this, void 0, void 0, function () {
-    var ethereum, web3, i, receipt;
+exports.waitReceipt = function (web3, txHash) { return __awaiter(_this, void 0, void 0, function () {
+    var i, receipt;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                ethereum = walletProvider_1.getProviderInstance();
-                if (!ethereum) {
-                    throw new Error('You have to use Ethereum browser to get receipt');
-                }
-                web3 = new web3_1.default(ethereum);
                 i = 0;
                 _a.label = 1;
             case 1:
@@ -94,3 +77,35 @@ exports.waitReceipt = function (txHash) { return __awaiter(_this, void 0, void 0
         }
     });
 }); };
+/**
+ * Sends given transaction using current wallet provider and waits until it is mined
+ */
+exports.sendAndWaitTx = function (txConfig) { return __awaiter(_this, void 0, void 0, function () {
+    var txHash, web3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, walletProvider_1.sendTransaction(txConfig)];
+            case 1:
+                txHash = _a.sent();
+                web3 = new web3_1.default(walletProvider_1.getProviderInstance());
+                return [2 /*return*/, exports.waitReceipt(web3, txHash)];
+        }
+    });
+}); };
+function getBlockDate(web3, blockNr) {
+    return __awaiter(this, void 0, void 0, function () {
+        var block;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, web3.eth.getBlock(blockNr)];
+                case 1:
+                    block = _a.sent();
+                    if (!block) {
+                        return [2 /*return*/, null];
+                    }
+                    return [2 /*return*/, moment_1.default(new Date(Number(block.timestamp) * 1000))];
+            }
+        });
+    });
+}
+exports.getBlockDate = getBlockDate;

@@ -1,6 +1,6 @@
 {
   "name": "wallet-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SDK for using wallets such as Metamask",
   "scripts": {
     "build": "npm run build:clean && npm run build:ts",
@@ -28,6 +28,7 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
+    "moment": "^2.24.0",
     "verifiable-data": "^2.6.6",
     "web3": "1.0.0-beta.55"
   },

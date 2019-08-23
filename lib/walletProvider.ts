@@ -2,6 +2,7 @@ import { TransactionConfig } from 'web3-core';
 import { toHex } from './convert';
 import { CustomProvider } from 'web3-providers';
 import Web3 from 'web3';
+import { cbToPromise } from 'lib/promise';
 
 export interface IWalletProvider extends CustomProvider {
 
@@ -92,25 +93,22 @@ export const getCurrentAccountAddress = async () => {
  * Submits transaction using metamask and returns its hash
  */
 export const sendTransaction = async (txConfig: TransactionConfig): Promise<string> => {
-  return cbToPromise<string>((callback) => {
-    const provider = getProviderInstance();
-    if (!provider) {
-      throw new Error('Your browser does not have Ethereum compatible wallet extension');
-    }
+  const provider = getProviderInstance();
+  if (!provider) {
+    throw new Error('Your browser does not have Ethereum compatible wallet extension');
+  }
 
-    // @ts-ignore
-    return provider.sendAsync({
-      method: 'eth_sendTransaction',
-      params: [{
-        gasPrice: toHex(txConfig.gasPrice),
-        gas: toHex(txConfig.gas),
-        to: txConfig.to,
-        from: txConfig.from,
-        value: toHex(txConfig.value),
-        data: txConfig.data,
-      }],
-    }, callback);
-  });
+  return cbToPromise<string>((callback) => provider.sendAsync({
+    method: 'eth_sendTransaction',
+    params: [{
+      gasPrice: toHex(txConfig.gasPrice),
+      gas: toHex(txConfig.gas),
+      to: txConfig.to,
+      from: txConfig.from,
+      value: toHex(txConfig.value),
+      data: txConfig.data,
+    }],
+  }, callback));
 };
 
 /**
@@ -131,24 +129,4 @@ export const getProviderInstance = (): IWalletProvider | null => {
   }
 
   return null;
-};
-
-/**
- * cbToPromise is a helper function that executes callback invoking function and returns a promise that
- * gets resolves as soon as the callback function gets invoked.
- */
-export const cbToPromise = async <TResult>(fnExecutor: (callback: any) => any) => {
-  return new Promise<TResult>((resolve, reject) => {
-    const callback = (err: any, res: any) => {
-      let finalErr = (res && res.error) || err;
-
-      if (finalErr) {
-        reject(finalErr);
-      } else {
-        resolve(res && res.result);
-      }
-    };
-
-    fnExecutor(callback);
-  });
 };

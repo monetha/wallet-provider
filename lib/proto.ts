@@ -1,13 +1,10 @@
-import { enableWallet, getCurrentAccountAddress } from './walletProvider';
-import { sendTx, waitReceipt } from './tx';
-
-// export default {
-//
-// };
+import { enableWallet, getCurrentAccountAddress, getProviderInstance } from './walletProvider';
+import { sendAndWaitTx, waitReceipt } from './tx';
 
 export {
   enableWallet,
   getCurrentAccountAddress,
-  sendTx,
+  getProviderInstance,
+  sendAndWaitTx,
   waitReceipt,
 };

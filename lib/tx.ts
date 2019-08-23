@@ -1,26 +1,15 @@
+import moment from 'moment';
 import Web3 from 'web3';
-import { TransactionConfig, TransactionReceipt } from 'web3-core';
-import { enableWallet, getProviderInstance, sendTransaction } from './walletProvider';
-
-export async function sendTx(txConfig: TransactionConfig) {
-  await enableWallet();
-
-  return sendTransaction(txConfig);
-}
+import { TransactionReceipt, TransactionConfig } from 'web3-core';
+import { Block } from 'web3-eth';
+import { sendTransaction, getProviderInstance } from './walletProvider';
 
 /**
  * waitReceipt waits for transaction to finish for the given txHash,
  * returns a promise which is resolved when transaction finishes.
  * @param {string} txHash a string with transaction hash as value
  */
-export const waitReceipt = async (txHash: string): Promise<TransactionReceipt> => {
-  const ethereum = getProviderInstance();
-  if (!ethereum) {
-    throw new Error('You have to use Ethereum browser to get receipt');
-  }
-
-  const web3 = new Web3(ethereum);
-
+export const waitReceipt = async (web3: Web3, txHash: string): Promise<TransactionReceipt> => {
   for (let i = 0; i < 50; i += 1) {
 
     const receipt = await web3.eth.getTransactionReceipt(txHash);
@@ -40,3 +29,23 @@ export const waitReceipt = async (txHash: string): Promise<TransactionReceipt> =
 
   throw new Error('Failed to get receipt after 50 retries');
 };
+
+/**
+ * Sends given transaction using current wallet provider and waits until it is mined
+ */
+export const sendAndWaitTx = async (txConfig: TransactionConfig): Promise<TransactionReceipt> => {
+  const txHash = await sendTransaction(txConfig);
+
+  const web3 = new Web3(getProviderInstance());
+
+  return waitReceipt(web3, txHash);
+};
+
+export async function getBlockDate(web3: Web3, blockNr: number) {
+  const block: Block = await web3.eth.getBlock(blockNr);
+  if (!block) {
+    return null;
+  }
+
+  return moment(new Date(Number(block.timestamp) * 1000));
+}

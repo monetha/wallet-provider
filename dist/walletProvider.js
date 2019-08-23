@@ -41,6 +41,7 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var convert_1 = require("./convert");
 var web3_1 = __importDefault(require("web3"));
+var promise_1 = require("lib/promise");
 /**
  * Enables wallet provider usage so it can be used or throws error otherwise
  */
@@ -113,25 +114,23 @@ exports.getCurrentAccountAddress = function () { return __awaiter(_this, void 0,
  * Submits transaction using metamask and returns its hash
  */
 exports.sendTransaction = function (txConfig) { return __awaiter(_this, void 0, void 0, function () {
+    var provider;
     return __generator(this, function (_a) {
-        return [2 /*return*/, exports.cbToPromise(function (callback) {
-                var provider = exports.getProviderInstance();
-                if (!provider) {
-                    throw new Error('Your browser does not have Ethereum compatible wallet extension');
-                }
-                // @ts-ignore
-                return provider.sendAsync({
-                    method: 'eth_sendTransaction',
-                    params: [{
-                            gasPrice: convert_1.toHex(txConfig.gasPrice),
-                            gas: convert_1.toHex(txConfig.gas),
-                            to: txConfig.to,
-                            from: txConfig.from,
-                            value: convert_1.toHex(txConfig.value),
-                            data: txConfig.data,
-                        }],
-                }, callback);
-            })];
+        provider = exports.getProviderInstance();
+        if (!provider) {
+            throw new Error('Your browser does not have Ethereum compatible wallet extension');
+        }
+        return [2 /*return*/, promise_1.cbToPromise(function (callback) { return provider.sendAsync({
+                method: 'eth_sendTransaction',
+                params: [{
+                        gasPrice: convert_1.toHex(txConfig.gasPrice),
+                        gas: convert_1.toHex(txConfig.gas),
+                        to: txConfig.to,
+                        from: txConfig.from,
+                        value: convert_1.toHex(txConfig.value),
+                        data: txConfig.data,
+                    }],
+            }, callback); })];
     });
 }); };
 /**
@@ -150,23 +149,3 @@ exports.getProviderInstance = function () {
     }
     return null;
 };
-/**
- * cbToPromise is a helper function that executes callback invoking function and returns a promise that
- * gets resolves as soon as the callback function gets invoked.
- */
-exports.cbToPromise = function (fnExecutor) { return __awaiter(_this, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, new Promise(function (resolve, reject) {
-                var callback = function (err, res) {
-                    var finalErr = (res && res.error) || err;
-                    if (finalErr) {
-                        reject(finalErr);
-                    }
-                    else {
-                        resolve(res && res.result);
-                    }
-                };
-                fnExecutor(callback);
-            })];
-    });
-}); };
