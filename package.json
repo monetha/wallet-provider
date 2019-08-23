@@ -1,7 +1,7 @@
 {
   "name": "wallet-provider",
   "version": "1.0.1",
-  "description": "SDK for using wallets such as Metamask",
+  "description": "SDK for using crypto wallets such as Metamask",
   "scripts": {
     "build": "npm run build:clean && npm run build:ts",
     "build:clean": "node ./scripts/clean-dist.js",

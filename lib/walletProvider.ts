@@ -2,7 +2,7 @@ import { TransactionConfig } from 'web3-core';
 import { toHex } from './convert';
 import { CustomProvider } from 'web3-providers';
 import Web3 from 'web3';
-import { cbToPromise } from 'lib/promise';
+import { cbToPromise } from './promise';
 
 export interface IWalletProvider extends CustomProvider {
 
