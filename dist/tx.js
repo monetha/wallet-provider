@@ -39,12 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var moment_1 = __importDefault(require("moment"));
 var web3_1 = __importDefault(require("web3"));
 var walletProvider_1 = require("./walletProvider");
+var SdkError_1 = require("./errors/SdkError");
+var ErrorCode_1 = require("./errors/ErrorCode");
 /**
  * waitReceipt waits for transaction to finish for the given txHash,
  * returns a promise which is resolved when transaction finishes.
+ *
+ * @param {Web3} web3
  * @param {string} txHash a string with transaction hash as value
  */
 exports.waitReceipt = function (web3, txHash) { return __awaiter(_this, void 0, void 0, function () {
@@ -67,13 +70,13 @@ exports.waitReceipt = function (web3, txHash) { return __awaiter(_this, void 0, 
             case 4:
                 if (!receipt.status) {
                     console.error(receipt);
-                    throw new Error('Transaction has failed');
+                    throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.TransactionFailed, 'Transaction has failed');
                 }
                 return [2 /*return*/, receipt];
             case 5:
                 i += 1;
                 return [3 /*break*/, 1];
-            case 6: throw new Error('Failed to get receipt after 50 retries');
+            case 6: throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.GetReceiptFailed, 'Failed to get receipt after 50 retries');
         }
     });
 }); };
@@ -92,20 +95,3 @@ exports.sendAndWaitTx = function (txConfig) { return __awaiter(_this, void 0, vo
         }
     });
 }); };
-function getBlockDate(web3, blockNr) {
-    return __awaiter(this, void 0, void 0, function () {
-        var block;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, web3.eth.getBlock(blockNr)];
-                case 1:
-                    block = _a.sent();
-                    if (!block) {
-                        return [2 /*return*/, null];
-                    }
-                    return [2 /*return*/, moment_1.default(new Date(Number(block.timestamp) * 1000))];
-            }
-        });
-    });
-}
-exports.getBlockDate = getBlockDate;
