@@ -11,3 +11,5 @@ exports.waitReceipt = tx_1.waitReceipt;
 var convert_1 = require("./convert");
 exports.toHex = convert_1.toHex;
 exports.toBN = convert_1.toBN;
+var IWalletProviderErrorCode_1 = require("./errors/IWalletProviderErrorCode");
+exports.IWalletProviderErrorCode = IWalletProviderErrorCode_1.IWalletProviderErrorCode;

@@ -43,7 +43,7 @@ var convert_1 = require("./convert");
 var web3_1 = __importDefault(require("web3"));
 var promise_1 = require("./promise");
 var SdkError_1 = require("./errors/SdkError");
-var ErrorCode_1 = require("./errors/ErrorCode");
+var IWalletProviderErrorCode_1 = require("./errors/IWalletProviderErrorCode");
 /**
  * Enables wallet provider usage so it can be used or throws error otherwise
  */
@@ -54,7 +54,7 @@ exports.enableWallet = function () { return __awaiter(_this, void 0, void 0, fun
             case 0:
                 ethereum = exports.getProviderInstance();
                 if (!ethereum) {
-                    throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
+                    throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
                 }
                 if (!ethereum.enable) return [3 /*break*/, 5];
                 result = void 0;
@@ -67,13 +67,13 @@ exports.enableWallet = function () { return __awaiter(_this, void 0, void 0, fun
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _a.sent();
-                throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.CouldNotEnableEthereumWallet, "Could not enable Ethereum wallet: " + e_1);
+                throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.CouldNotEnableEthereumWallet, "Could not enable Ethereum wallet: " + e_1);
             case 4:
                 // Metamask specific
                 if (ethereum.isMetaMask) {
                     // Metamask must contain array of accounts with at least 1 account after enabling
                     if (!result || !result[0]) {
-                        throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.MetamaskEnablingUnknownProblem, 'There was an unknown problem while enabling MetaMask');
+                        throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.MetamaskEnablingUnknownProblem, 'There was an unknown problem while enabling MetaMask');
                     }
                 }
                 _a.label = 5;
@@ -120,7 +120,7 @@ exports.sendTransaction = function (txConfig) { return __awaiter(_this, void 0, 
     return __generator(this, function (_a) {
         provider = exports.getProviderInstance();
         if (!provider) {
-            throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
+            throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
         }
         return [2 /*return*/, promise_1.cbToPromise(function (callback) { return provider.sendAsync({
                 method: 'eth_sendTransaction',

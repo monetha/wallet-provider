@@ -1,5 +1,5 @@
-import { ErrorCode } from './ErrorCode';
-export interface ISdkError extends Error {
-    sdkErrorCode: ErrorCode;
+import { IWalletProviderErrorCode } from './IWalletProviderErrorCode';
+export interface IWalletProviderError extends Error {
+    sdkErrorCode: IWalletProviderErrorCode;
 }
-export declare function createSdkError(code: ErrorCode, message?: string, rawError?: Error): ISdkError;
+export declare function createSdkError(code: IWalletProviderErrorCode, message?: string, rawError?: Error): IWalletProviderError;

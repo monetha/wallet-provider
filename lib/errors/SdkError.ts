@@ -1,11 +1,11 @@
-import { ErrorCode } from './ErrorCode';
+import { IWalletProviderErrorCode } from './IWalletProviderErrorCode';
 
-export interface ISdkError extends Error {
-  sdkErrorCode: ErrorCode;
+export interface IWalletProviderError extends Error {
+  sdkErrorCode: IWalletProviderErrorCode;
 }
 
-export function createSdkError(code: ErrorCode, message?: string, rawError?: Error): ISdkError {
-  let error: Partial<ISdkError> = rawError;
+export function createSdkError(code: IWalletProviderErrorCode, message?: string, rawError?: Error): IWalletProviderError {
+  let error: Partial<IWalletProviderError> = rawError;
   if (!error) {
     error = new Error(message);
   }
@@ -16,5 +16,5 @@ export function createSdkError(code: ErrorCode, message?: string, rawError?: Err
     error.message = message;
   }
 
-  return error as ISdkError;
+  return error as IWalletProviderError;
 }

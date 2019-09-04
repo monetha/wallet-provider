@@ -1,4 +1,4 @@
-export declare enum ErrorCode {
+export declare enum IWalletProviderErrorCode {
     NoEthereumCompatibleWalletExtensionFound = "NoEthereumCompatibleWalletExtensionFound",
     CouldNotEnableEthereumWallet = "CouldNotEnableEthereumWallet",
     MetamaskEnablingUnknownProblem = "MetamaskEnablingUnknownProblem",

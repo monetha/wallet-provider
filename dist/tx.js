@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var web3_1 = __importDefault(require("web3"));
 var walletProvider_1 = require("./walletProvider");
 var SdkError_1 = require("./errors/SdkError");
-var ErrorCode_1 = require("./errors/ErrorCode");
+var IWalletProviderErrorCode_1 = require("./errors/IWalletProviderErrorCode");
 /**
  * waitReceipt waits for transaction to finish for the given txHash,
  * returns a promise which is resolved when transaction finishes.
@@ -70,13 +70,13 @@ exports.waitReceipt = function (web3, txHash) { return __awaiter(_this, void 0, 
             case 4:
                 if (!receipt.status) {
                     console.error(receipt);
-                    throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.TransactionFailed, 'Transaction has failed');
+                    throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.TransactionFailed, 'Transaction has failed');
                 }
                 return [2 /*return*/, receipt];
             case 5:
                 i += 1;
                 return [3 /*break*/, 1];
-            case 6: throw SdkError_1.createSdkError(ErrorCode_1.ErrorCode.GetReceiptFailed, 'Failed to get receipt after 50 retries');
+            case 6: throw SdkError_1.createSdkError(IWalletProviderErrorCode_1.IWalletProviderErrorCode.GetReceiptFailed, 'Failed to get receipt after 50 retries');
         }
     });
 }); };

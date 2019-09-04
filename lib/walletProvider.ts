@@ -4,7 +4,7 @@ import { CustomProvider } from 'web3-providers';
 import Web3 from 'web3';
 import { cbToPromise } from './promise';
 import { createSdkError } from './errors/SdkError';
-import { ErrorCode } from './errors/ErrorCode';
+import { IWalletProviderErrorCode } from './errors/IWalletProviderErrorCode';
 
 export interface IWalletProvider extends CustomProvider {
 
@@ -35,7 +35,7 @@ export interface IWalletProvider extends CustomProvider {
 export const enableWallet = async () => {
   const ethereum = getProviderInstance();
   if (!ethereum) {
-    throw createSdkError(ErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
+    throw createSdkError(IWalletProviderErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
   }
 
   // Some web3 browsers needs enabling
@@ -45,7 +45,7 @@ export const enableWallet = async () => {
     try {
       result = await ethereum.enable();
     } catch (e) {
-      throw createSdkError(ErrorCode.CouldNotEnableEthereumWallet, `Could not enable Ethereum wallet: ${e}`);
+      throw createSdkError(IWalletProviderErrorCode.CouldNotEnableEthereumWallet, `Could not enable Ethereum wallet: ${e}`);
     }
 
     // Metamask specific
@@ -53,7 +53,7 @@ export const enableWallet = async () => {
 
       // Metamask must contain array of accounts with at least 1 account after enabling
       if (!result || !result[0]) {
-        throw createSdkError(ErrorCode.MetamaskEnablingUnknownProblem, 'There was an unknown problem while enabling MetaMask');
+        throw createSdkError(IWalletProviderErrorCode.MetamaskEnablingUnknownProblem, 'There was an unknown problem while enabling MetaMask');
       }
     }
   }
@@ -97,7 +97,7 @@ export const getCurrentAccountAddress = async () => {
 export const sendTransaction = async (txConfig: TransactionConfig): Promise<string> => {
   const provider = getProviderInstance();
   if (!provider) {
-    throw createSdkError(ErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
+    throw createSdkError(IWalletProviderErrorCode.NoEthereumCompatibleWalletExtensionFound, 'Your browser does not have Ethereum compatible wallet extension');
   }
 
   return cbToPromise<string>((callback) => provider.sendAsync({
