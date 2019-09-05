@@ -1,6 +1,10 @@
 # Integrating a crypto wallet into your dApp
 
-## SDK for using wallets such as Metamask
+## SDK for using wallets such as
+
+- Metamask desktop
+- Metamask mobile
+- Opera crypto wallet
 
 ### Basic usage
 
@@ -15,7 +19,7 @@ import {
  } from 'wallet-provider';
 import { TransactionConfig } from 'web3-core';
 import Web3 from 'web3';
-import {AbiItem} from 'web3-utils';
+import { AbiItem } from 'web3-utils';
 import { passportFactoryAbi } from './contracts';
 
 const run = async () => {
