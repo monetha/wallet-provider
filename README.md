@@ -6,6 +6,29 @@
 - Metamask mobile
 - Opera crypto wallet
 
+### Introduction
+
+Sometimes during integrating an Ethereum wallet (like Opera or MetaMask) into decentralized web applications you can encounter unexpected complexity.
+
+After some more research and tinkering we managed to find an integration methods that seems to avoid the quirks of individual wallet providers.
+
+In short, here’s what you should expect from wallet providers:
+
+– They should automatically inject the window.ethereum global variable, which must provide these methods:
+  * `.send(rpcMethodName: string, params?: Array<any>): Promise<any>` – this is the preferred and recommended way (by them) to call an RPC method as it returns the promise.
+  * `.sendAsync(payload, callback: (error, result) => void)` – this is an optional alternative, only needed when provider internally uses a Web3 object prior to version 1.0.0-beta38.
+  * `.on(eventName, listener)`– a method of the EventEmitter interface which allows listening for various provider events like “networkChanged”, “accountsChanged”, etc.
+  * `.removeListener(eventName, listener)` – the same, but for removing the event listener.
+- They should inject `window.web3.currentProvider` – which is essentially the same object as window.ethereum.
+
+The slow creation of the EIP standard and the volatile implementation of Web3 have led to inconsistencies in Ethereum wallet provider implementations. Hopefully, the situation will get better in the future, but for now we have what we have.
+
+### Installation
+
+```shell script
+npm install --save git+https://github.com/monetha/wallet-provider.git
+```
+
 ### Exported methods
 
 - `enableWallet` - enables wallet provider usage so it can be used or throws error otherwise
@@ -81,8 +104,8 @@ const run = async () => {
     txConfig = {
       from: requesterAddress,
       to: `0x3A3ebe78B24f33cb05DDa241f817Db0adaD95ae5`,
-      gas,
       data,
+      gas,
       gasPrice,
     };
     receipt = await sendAndWaitTx(txConfig);
@@ -91,20 +114,3 @@ const run = async () => {
   }
 }
 ```
-
-### Description
-
-Sometimes during integrating an Ethereum wallet (like Opera or MetaMask) into decentralized web applications you can encounter unexpected complexity.
-
-After some more research and tinkering we managed to find an integration methods that seems to avoid the quirks of individual wallet providers.
-
-In short, here’s what you should expect from wallet providers:
-
-– They should automatically inject the window.ethereum global variable, which must provide these methods:
-  * `.send(rpcMethodName: string, params?: Array<any>): Promise<any>` – this is the preferred and recommended way (by them) to call an RPC method as it returns the promise.
-  * `.sendAsync(payload, callback: (error, result) => void)` – this is an optional alternative, only needed when provider internally uses a Web3 object prior to version 1.0.0-beta38.
-  * `.on(eventName, listener)`– a method of the EventEmitter interface which allows listening for various provider events like “networkChanged”, “accountsChanged”, etc.
-  * `.removeListener(eventName, listener)` – the same, but for removing the event listener.
-- They should inject `window.web3.currentProvider` – which is essentially the same object as window.ethereum.
-
-The slow creation of the EIP standard and the volatile implementation of Web3 have led to inconsistencies in Ethereum wallet provider implementations. Hopefully, the situation will get better in the future, but for now we have what we have.
